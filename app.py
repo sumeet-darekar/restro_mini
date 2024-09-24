@@ -70,7 +70,7 @@ def user_panel(user):
         st.success(f"Order placed for {selected_item}")
 
 def main():
-    st.title("Hotel Management System")
+    st.title("Dummies Restro & Bar")
     create_tables()
     
     if "role" not in st.session_state:
