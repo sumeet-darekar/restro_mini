@@ -1,7 +1,8 @@
+
 import streamlit as st
 from admin import add_staff, delete_staff, add_menu_item, delete_menu_item
 from staff import view_orders, update_order_status
-from user import view_menu, place_order
+from user import view_menu, place_order, view_user_orders
 from database import create_tables
 
 def login():
@@ -79,6 +80,34 @@ def main():
         staff_panel()
     else:
         user_panel()
+def user_panel():
+    st.title("User Panel")
+
+    # Fetch user ID (for now, we assume user_id = 1 for the demo; this should be dynamic in a real app)
+    user_id = 1  # Change this to the actual logged-in user's ID
+
+    # View Menu and Place Order
+    st.header("Menu")
+    menu = view_menu()
+    for item in menu:
+        st.write(f"Item: {item[1]}, Price: {item[2]}")
+    
+    selected_item = st.selectbox("Select Item to Order", [item[1] for item in menu])
+    
+    if st.button("Place Order"):
+        place_order(user_id, selected_item)
+        st.success(f"Order placed for {selected_item}")
+
+    # Display User's Orders
+    st.header("Your Orders")
+    orders = view_user_orders(user_id)
+    
+    if orders:
+        for order in orders:
+            st.write(f"Order ID: {order[0]}, Menu Item: {order[2]}, Status: {order[3]}")
+    else:
+        st.info("You have not placed any orders yet.")
+
 
 if __name__ == "__main__":
     main()
